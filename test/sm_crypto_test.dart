@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:dart_sm/src/sm2.dart';
-import 'package:dart_sm/src/sm3.dart';
-import 'package:dart_sm/src/sm4.dart';
+import 'package:dart_sm_new/src/sm2.dart';
+import 'package:dart_sm_new/src/sm3.dart';
+import 'package:dart_sm_new/src/sm4.dart';
 import 'package:test/test.dart';
 
 void main() async {
@@ -87,6 +87,18 @@ void main() async {
       String encryptData = SM4.encrypt(data, mode: SM4CryptoMode.CBC, iv: 'fedcba98765432100123456789abcdef');
       String decryptData = SM4.decrypt(encryptData, mode: SM4CryptoMode.CBC, iv: 'fedcba98765432100123456789abcdef');
       expect(decryptData, data);
+    });
+
+    test('sm4 ecb padding zero', () {
+      final src = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+      final key = "4141414141414141";
+      final output = "V5brYI4Xp8WcxLpM1pqBSFeW62COF6fFnMS6TNaagUiib11tuONUMY354RnUPm9I";
+      String encryptData = SM4.encrypt(src, key: key, mode: SM4CryptoMode.CBC);
+      // debugPrint(encryptData);
+      expect(encryptData, equals(output));
+      final decryptData = SM4.decrypt(encryptData, key: key, mode: SM4CryptoMode.CBC);
+      // debugPrint(decryptData);
+      expect(decryptData, equals(src));
     });
   });
 }
