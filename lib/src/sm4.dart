@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'utils/utils.dart';
 
 enum SM4CryptoMode {
@@ -363,6 +364,12 @@ class SM4 {
   static void setKey(String key) {
     // 改用 utf8.decode
     List<int> keyBytes = utf8.encode(key.substring(0, 16));
+    setKeyBytes(Uint8List.fromList(keyBytes));
+  }
+
+  static void setKeyBytes(Uint8List key) {
+    // 改用 utf8.decode
+    List<int> keyBytes = key.toList();
     List<int> intermediateKeys = List<int>.filled(36, 0);
     for (int i = 0; i < 4; i++) {
       intermediateKeys[i] = _readUint32BE(keyBytes, i * 4) ^ FK[i];
@@ -497,5 +504,19 @@ class SM4 {
     List<int> input = base64.decode(cipherText);
     List<int> output = _crypto(input, SM4_DECRYPT, mode, iv);
     return utf8.decode(output);
+  }
+
+  static Uint8List encryptBytes(Uint8List plainText, {Uint8List? key, SM4CryptoMode mode = SM4CryptoMode.ECB, String? iv}) {
+    if (key != null) setKeyBytes(key);
+    List<int> input = plainText.toList();
+    List<int> output = _crypto(input, SM4_ENCRYPT, mode, iv);
+    return Uint8List.fromList(output);
+  }
+
+  static Uint8List decryptBytes(Uint8List cipherText, {Uint8List? key, SM4CryptoMode mode = SM4CryptoMode.ECB, String? iv}) {
+    if (key != null) setKeyBytes(key);
+    List<int> input = cipherText.toList();
+    List<int> output = _crypto(input, SM4_DECRYPT, mode, iv);
+    return Uint8List.fromList(output);
   }
 }

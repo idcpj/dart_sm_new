@@ -1,4 +1,4 @@
-library dart_sm_new;
+library dart_sm;
 
 export 'src/sm2.dart';
 export 'src/sm3.dart';
