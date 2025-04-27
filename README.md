@@ -90,6 +90,19 @@ String cipherText = SM4.encrypt(data, key: '0123456789abcdeffedcba9876543210');
 String plainText = SM4.encrypt(cipherText, key: '0123456789abcdeffedcba9876543210');
 ```
 
+新增 iv 为空
+```
+final src = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+final key = "4141414141414141";
+final output = "V5brYI4Xp8WcxLpM1pqBSFeW62COF6fFnMS6TNaagUiib11tuONUMY354RnUPm9I";
+String encryptData = SM4.encrypt(src, key: key, mode: SM4CryptoMode.CBC);
+// debugPrint(encryptData);
+expect(encryptData, equals(output));
+final decryptData = SM4.decrypt(encryptData, key: key, mode: SM4CryptoMode.CBC);
+// debugPrint(decryptData);
+expect(decryptData, equals(src));
+```
+
 # 致谢
 * [js版本的国密实现：sm-crypto](https://github.com/JuneAndGreen/sm-crypto)
 
